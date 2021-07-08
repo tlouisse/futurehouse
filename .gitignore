@@ -1,8 +1,15 @@
 node_modules/
 /lib/
 /test/
+/dist/
 custom-elements.json
 # top level source
+
+src/(!types)*/**/*.js
+src/(!types)*/**/*.js.map
+src/(!types)*/**/*.d.ts
+src/(!types)*/**/*.d.map
+
 my-element.js
 my-element.js.map
 my-element.d.ts

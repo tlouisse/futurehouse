@@ -1,0 +1,1 @@
+{"version":3,"file":"ScopedLightDomController.d.ts","sourceRoot":"","sources":["../src/ui/ScopedLightDomController.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,kBAAkB,EAAE,sBAAsB,EAAC,MAAM,KAAK,CAAC;AAE/D,qBAAa,wBAAyB,YAAW,kBAAkB;IACjE,IAAI,EAAE,sBAAsB,CAAC;IAC7B,OAAO,CAAC,eAAe,CAAW;gBAEtB,IAAI,EAAE,sBAAsB,EAAE,QAAQ,EAAE,MAAM,EAAE;IAK5D,aAAa;IAkBb,OAAO,CAAC,2BAA2B;CAOpC"}

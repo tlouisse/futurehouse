@@ -7,7 +7,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "inlineSources": true,
-    "outDir": "./",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "noUnusedLocals": true,
@@ -19,14 +19,14 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "plugins": [
-      {
-        "name": "ts-lit-plugin",
-        "strict": true
-      }
-    ]
+    "forceConsistentCasingInFileNames": true
+    // "plugins": [
+    //   {
+    //     "name": "ts-lit-plugin",
+    //     "strict": true
+    //   }
+    // ]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/ui/utils/ModelDirective.js"],
   "exclude": []
 }
