@@ -2,6 +2,9 @@ import {LitElement, html, css, PropertyValues} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {ref, createRef, RefOrCallback} from 'lit/directives/ref.js';
 
+export type ChartResultEntry = {time: string; value: number};
+export type ChartResult = {name: string; values: ChartResultEntry[]};
+
 // import * as d3 from 'd3';
 
 /**
@@ -9,7 +12,7 @@ import {ref, createRef, RefOrCallback} from 'lit/directives/ref.js';
 @customElement('m-chart')
 export class MChart extends LitElement {
   @property({type: Array})
-  data: Array<{time: number; value: number}> = [];
+  data: Array<ChartResult> = [];
 
   static styles = css`
     :host {
@@ -29,6 +32,18 @@ export class MChart extends LitElement {
     canvas: createRef<HTMLDivElement>(),
   };
 
+  private __getYUpperBounds({data}: {data: ChartResult[]}) {
+    const dataClone: ChartResult[] = [...data];
+    const maxYValue = Math.max(
+      ...dataClone.map(
+        (d) => d.values.sort((a, b) => b.value - a.value)[0].value
+      )
+    );
+    const multipliedYval = maxYValue * 1.2; // add some headroom
+    const upperYValue = multipliedYval - (multipliedYval % 50000); // make it a round number
+    return {upperYValue, maxYValue};
+  }
+
   protected _createChart() {
     this.refs.canvas.value.innerHTML = '';
     // set the dimensions and margins of the graph
@@ -46,40 +61,10 @@ export class MChart extends LitElement {
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     const dat = this.data;
+    const {upperYValue} = this.__getYUpperBounds({data: dat});
 
-    const maxYValue = dat.sort((a, b) => b.value - a.value)[0].value;
-    // console.log('upperYValue', upperYValue);
-
-    const multipliedYval = maxYValue * 1.2; // add some headroom
-    const upperYValue = multipliedYval - (multipliedYval % 50000); // make it a round number
-
-    // const upperYValue = 500000; // put upper limit on half a million for now...
-
-    // Read the data
-    // d3.csv(
-    //   'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_connectedscatter.csv',
-    //   function (data) {
-    // List of groups (here I have one group per column)
-    const allGroup = ['valueA', 'valueB', 'valueC'];
-
-    // // Reformat the data: we need an array of arrays of {x, y} tuples
-    // const oDataReady = allGroup.map(function (grpName) {
-    //   // .map allows to do something for each element of the list
-    //   return {
-    //     name: grpName,
-    //     values: data.map(function (d) {
-    //       return {time: d.time, value: +d[grpName]};
-    //     }),
-    //   };
-    // });
-    // const allGroup = ['test', 'best', 'rest'];
-    const dataReady = [
-      {name: 'test', values: dat},
-      // {name: 'best', values: dat},
-      // {name: 'rest', values: dat},
-    ];
-    // I strongly advise to/ have a look to dataReady with
-    // console.log('orig', oDataReady);
+    const dataReady = dat;
+    const allGroup = dataReady.map((d) => d.name);
 
     // A color scale: one color for each group
     const myColor = d3.scaleOrdinal().domain(allGroup).range(d3.schemeSet2);

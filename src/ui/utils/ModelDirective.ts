@@ -56,11 +56,9 @@ export const model = directive(
         element.addEventListener('model-value-changed', (ev) => {
           const {formPath} = (ev as CustomEvent).detail;
           // [1a] ModelValue of currentTarget changed
-          if (formPath[0] === element) {
-            if (!isForm) {
-              // eslint-disable-next-line no-param-reassign
-              modelObj[key] = element.modelValue;
-            }
+          if (formPath[0] === element && !isForm) {
+            // eslint-disable-next-line no-param-reassign
+            modelObj[key] = element.modelValue;
           }
           // [1b] ModelValue of a child changed
           else {
@@ -68,6 +66,7 @@ export const model = directive(
             const path = formPath.slice(0, -1).reverse();
             path.forEach((el: FormControlHost, i: number) => {
               if (i !== path.length - 1) {
+                objLvl[el.name] = objLvl[el.name] || {};
                 objLvl = objLvl[el.name];
                 return;
               }
